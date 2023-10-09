@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.25.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.14.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.22.2"></script>
+</head>
+<body>
+    <h1>Tornadoes Visualization</h1>
+    <p>This is a visualization of tornado data between 1950-2021 in US.</p>
+
+  <div id="vis"/>
+  <script>
+    const spec = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 800,
+  "height": 600,
+  "title": "Tornadoes between 1950-2021",
+  "projection": {"type": "equalEarth"},
+  "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/PatrickMao0/dv2//8efe18d35aa89213d029fa37ada836b392135d5a/ne_110m_admin_0_countries.json",
+        "format": {"type": "topojson", "feature": "ne_110m_admin_0_countries"}
+      },
+      "mark": {"type": "geoshape", "fill": "lightgray", "stroke": "white"}
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/PatrickMao0/dv2/325e52cc64b56c3f98116ffd47614675b6655078/tornados.csv"
+      },
+      "mark": {"type": "circle", "tooltip": {"content": "data"}},
+      "encoding": {
+        "longitude": {"field": "slon", "type": "quantitative"},
+        "latitude": {"field": "slat", "type": "quantitative"},
+        "size": {
+          "field": "mag",
+          "type": "quantitative",
+          "title": "F-scale",
+          "scale": {"domain": [3, 5], "range": [10, 80]}
+        },
+        "color": {
+          "field": "len",
+          "type": "quantitative",
+          "title": "Length in miles",
+          "scale": {"scheme": "reds"}
+        }
+      }
+    }
+  ]
+};
+    vegaEmbed("#vis", spec, {mode: "vega-lite"}).then(console.log).catch(console.warn);
+  </script>
+</body>
+</html>
