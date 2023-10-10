@@ -1,20 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
+
   <script src="https://cdn.jsdelivr.net/npm/vega@5.25.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.14.1"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.22.2"></script>
 </head>
-<body>
+<style>
+    body {
+      background-color: lightblue;
+    }
+  </style>
+<body> 
     <h1>Tornadoes Visualization</h1>
-    <p>This is a visualization of tornado data between 1950-2021 in US.</p>
-
-  <div id="vis"/>
+    <h2>This is a visualization of tornado data between 1950-2021 in US.</h2>
+    <p2>Tornadoes are one of nature's most powerful and destructive meteorological phenomena.
+    <br>Due to their destructive potential, tornadoes are closely monitored and studied by meteorologists
+    <br>The following visualisation showcase the data from Kaggle detailing the location, date, length and damage etc. 
+    </p2>
+     
+  
+    <div id="vis"/>
   <script>
     const spec = {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": 800,
-  "height": 600,
+  "width": 600,
+  "height": 500,
   "title": "Tornadoes between 1950-2021",
   "projection": {"type": "equalEarth"},
   "layer": [
@@ -51,5 +62,15 @@
 };
     vegaEmbed("#vis", spec, {mode: "vega-lite"}).then(console.log).catch(console.warn);
   </script>
+
+    <p2>As shown in the visualisatin, tornadoes mostly occur in the east coast and especially central of United States.
+    <br>Tornado alley is the central region of Uniterdd States receives high frequency of tornado.
+    <br>The main reason is because moist Gulf air meets cold, dry Canadian air, it creats ideal conditions for severe weather
+    </p2>
+
+
+    <h3>
+        second visualisation
+    </h3>
 </body>
 </html>
