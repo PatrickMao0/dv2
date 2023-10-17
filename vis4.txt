@@ -1,0 +1,35 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 800,
+  "height": 600,
+  "title": "Total injury",
+  "projection": {"type": "equalEarth"},
+  "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/PatrickMao0/dv2/325e52cc64b56c3f98116ffd47614675b6655078/tornados.csv"
+      },
+      "transform": [
+        {"filter": "datum.inj !== 'NA'"},
+        {
+          "aggregate": [{"op": "sum", "field": "inj", "as": "total_inj"}],
+          "groupby": ["mag"]
+        }
+      ],
+      "mark": {"type": "bar", "color": "red"},
+      "encoding": {
+        "x": {
+          "field": "mag",
+          "type": "ordinal",
+          "sort": ["NA", "0", "1", "2", "3", "4", "5"],
+          "title": "F-scale"
+        },
+        "y": {"field": "total_inj", "type": "quantitative", "title": null},
+        "tooltip": [
+          {"field": "mag", "type": "ordinal"},
+          {"field": "total_inj", "type": "quantitative", "title": "Total inj"}
+        ]
+      }
+    }
+  ]
+}

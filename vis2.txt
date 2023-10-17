@@ -1,0 +1,32 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 800,
+  "height": 600,
+  "title": "Tornadoes Numbers ",
+  "data": {
+    "url": "https://raw.githubusercontent.com/PatrickMao0/dv2/325e52cc64b56c3f98116ffd47614675b6655078/tornados.csv"
+  },
+  "transform": [
+    {
+      "aggregate": [{"op": "count", "field": "mag", "as": "count"}],
+      "groupby": ["mag"]
+    }
+  ],
+  "mark": {"type": "bar", "color": "gray"},
+  "encoding": {
+    "x": {
+      "field": "mag",
+      "type": "ordinal",
+      "sort": ["NA", "0", "1", "2", "3", "4", "5"],
+      "title": "F-scale"
+    },
+    "y": {
+      "field": "count",
+      "type": "quantitative",
+      "title": "Total Number of Tornadoes"
+    },
+    "tooltip": [
+      {"field": "count", "type": "quantitative", "title": "Total Tornadoes"}
+    ]
+  }
+}

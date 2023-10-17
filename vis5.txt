@@ -1,0 +1,72 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 800,
+  "height": 600,
+  "title": "Tornadoes Numbers Over the Years",
+  "data": {
+    "url": "https://raw.githubusercontent.com/PatrickMao0/dv2/325e52cc64b56c3f98116ffd47614675b6655078/tornados.csv"
+  },
+  "selection": {
+    "F-scale_select": {
+      "type": "single",
+      "fields": ["mag"],
+      "bind": {
+        "input": "select",
+        "options": [
+          null,
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        "labels": [
+          "Show All",
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+          
+        ],
+        "name": "F_scale slelct:"
+      }
+    }
+  },
+  "transform": [
+    {"filter": "datum.mag != 'NA'"},
+    {"filter": {"selection": "F-scale_select"}},
+    {
+      "aggregate": [{"op": "count", "field": "tornado", "as": "tornado_count"}],
+      "groupby": ["yr", "mag"]
+    }
+  ],
+  
+  "mark": {"type": "area", "line": true},
+  "encoding": {
+    "x": {"field": "yr", "type": "temporal", "axis": {"title": "Year"}},
+    "y": {
+      "field": "tornado_count",
+      "type": "quantitative",
+      "axis": {"title": "Tornado Numbers"}
+      
+    },
+    "color": {
+      "field": "mag",
+      "type": "quantitative",
+      "scale": {"domain": [0, 5], "range": ["lightgrey", "black"]},
+      "legend": {"title": "F-scale"}
+    },
+    "tooltip": [
+      {"field": "yr", "type": "temporal", "title": "Year"},
+      {
+        "field": "tornado_count",
+        "type": "quantitative",
+        "title": "Tornado Numbers"
+      },
+      {"field": "mag", "type": "ordinal", "title": "F-scale"}
+    ]
+  }
+}

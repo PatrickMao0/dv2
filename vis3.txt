@@ -1,0 +1,34 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 800,
+  "height": 600,
+  "title": "Total death",
+  "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/PatrickMao0/dv2/325e52cc64b56c3f98116ffd47614675b6655078/tornados.csv"
+      },
+      "transform": [
+        {"filter": "datum.fat !== 'NA'"},
+        {
+          "aggregate": [{"op": "sum", "field": "fat", "as": "total_fat"}],
+          "groupby": ["mag"]
+        }
+      ],
+      "mark": {"type": "bar", "color": "darkred"},
+      "encoding": {
+        "x": {
+          "field": "mag",
+          "type": "ordinal",
+          "sort": ["NA", "0", "1", "2", "3", "4", "5"],
+          "title": "F-scale"
+        },
+        "y": {"field": "total_fat", "type": "quantitative", "title": null},
+        "tooltip": [
+          {"field": "mag", "type": "ordinal"},
+          {"field": "total_fat", "type": "quantitative", "title": "Total fat"}
+        ]
+      }
+    }
+  ]
+}
