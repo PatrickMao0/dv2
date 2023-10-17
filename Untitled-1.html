@@ -1,76 +1,360 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
   <script src="https://cdn.jsdelivr.net/npm/vega@5.25.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.14.1"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.22.2"></script>
-</head>
-<style>
+
+  <style>
     body {
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: lightblue;
+      margin: 20px;
+      width: 800px;
+      align-content: center;
+      align-items: center;
+      justify-content: center;
+
     }
   </style>
-<body> 
-    <h1>Tornadoes Visualization</h1>
-    <h2>This is a visualization of tornado data between 1950-2021 in US.</h2>
-    <p2>Tornadoes are one of nature's most powerful and destructive meteorological phenomena.
-    <br>Due to their destructive potential, tornadoes are closely monitored and studied by meteorologists
-    <br>The following visualisation showcase the data from Kaggle detailing the location, date, length and damage etc. 
-    </p2>
-     
-  
-    <div id="vis"/>
-  <script>
-    const spec = {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": 600,
-  "height": 500,
-  "title": "Tornadoes between 1950-2021",
-  "projection": {"type": "equalEarth"},
-  "layer": [
-    {
-      "data": {
-        "url": "https://raw.githubusercontent.com/PatrickMao0/dv2//8efe18d35aa89213d029fa37ada836b392135d5a/ne_110m_admin_0_countries.json",
-        "format": {"type": "topojson", "feature": "ne_110m_admin_0_countries"}
-      },
-      "mark": {"type": "geoshape", "fill": "lightgray", "stroke": "white"}
-    },
-    {
-      "data": {
-        "url": "https://raw.githubusercontent.com/PatrickMao0/dv2/325e52cc64b56c3f98116ffd47614675b6655078/tornados.csv"
-      },
-      "mark": {"type": "circle", "tooltip": {"content": "data"}},
-      "encoding": {
-        "longitude": {"field": "slon", "type": "quantitative"},
-        "latitude": {"field": "slat", "type": "quantitative"},
-        "size": {
-          "field": "mag",
-          "type": "quantitative",
-          "title": "F-scale",
-          "scale": {"domain": [3, 5], "range": [10, 80]}
+
+
+<body>
+  <div>
+    <p style="text-align: center;font-size: 60px;font-weight: bolder;font-family:'Times New Roman', Times, serif">Tornadoes Visualization</p>
+    <h2 style="text-align: center;font-size: 30px;font-family:'Times New Roman', Times, serif">This is a visualization of tornado data <br>between 1950-2021 in US.</h2>
+  </div>
+
+  <div style="width: 15%; float: left; margin-top: 20px;">
+    <p2>Tornadoes are among nature's most powerful and destructive meteorological phenomena. Due to their immense
+      destructive potential, meteorologists closely monitor and study tornadoes. The following visualization showcases
+      data from Kaggle, providing details on their locations, dates, lengths, and the extent of damage, among other
+      factors.</p2>
+  </div>
+
+  <div id="vis1" style="width: 50%; float: left; margin: 20px;">
+    <script>
+      const spec1 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "title": "Tornadoes between 1950-2021",
+        "width": 500,
+        "height": 300,
+        "data": {
+          "url": "https://raw.githubusercontent.com/PatrickMao0/dv2/325e52cc64b56c3f98116ffd47614675b6655078/tornados.csv"
         },
-        "color": {
-          "field": "len",
-          "type": "quantitative",
-          "title": "Length in miles",
-          "scale": {"scheme": "reds"}
+        "params": [
+          {
+            "name": "Len_Above",
+            "value": 20,
+            "bind": {
+              "input": "range",
+              "min": 0,
+              "max": 250,
+              "step": 1,
+              "name": "Minimum Length: "
+            }
+          },
+          {
+            "name": "Mag_Above",
+            "value": 3.5,
+            "bind": {
+              "input": "range",
+              "min": 0,
+              "max": 5,
+              "step": 0.1,
+              "name": "Minimum F-scale: "
+            }
+          }
+        ],
+        "transform": [
+          { "filter": "datum.mag >= Mag_Above" },
+          { "filter": "datum.len > Len_Above" }
+        ],
+        "layer": [
+          {
+            "data": {
+              "url": "https://raw.githubusercontent.com/PatrickMao0/dv2/8efe18d35aa89213d029fa37ada836b392135d5a/ne_110m_admin_0_countries.json",
+              "format": { "type": "topojson", "feature": "ne_110m_admin_0_countries" }
+            },
+            "mark": { "type": "geoshape", "fill": "lightgray", "stroke": "white" }
+          },
+          {
+            "mark": "circle",
+            "encoding": {
+              "longitude": { "field": "slon", "type": "quantitative" },
+              "latitude": { "field": "slat", "type": "quantitative" },
+              "size": {
+                "field": "len",
+                "type": "quantitative",
+                "title": "Length in miles",
+                "scale": { "domain": [0, 210] }
+              },
+              "color": {
+                "field": "mag",
+                "type": "quantitative",
+                "title": "F-scale",
+                "scale": { "domain": [0, 5], "range": ["white", "brown"] }
+              }
+            }
+          }
+        ]
+      };
+      vegaEmbed("#vis1", spec1, { mode: "vega-lite" }).then(console.log).catch(console.warn);
+    </script>
+  </div>
+
+  <div style="width: 80%;float: right;  margin-bottom:40px;">
+    <p2>As shown in the visualization, tornadoes mostly occur on the East Coast, especially in the central United
+      States. Tornado Alley, a central region of the United States, receives a high frequency of tornadoes. The main
+      reason is that moist Gulf air meets cold, dry Canadian air, creating ideal conditions for severe weather.
+      <br>
+    </p2>
+  </div>
+
+
+  <div id="vis2" style="width: 50%;  margin-top: 40px;">
+
+    <script>
+      const spec2 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "width": 500,
+        "height": 400,
+        "title": "Tornadoes Numbers ",
+        "data": {
+          "url": "https://raw.githubusercontent.com/PatrickMao0/dv2/325e52cc64b56c3f98116ffd47614675b6655078/tornados.csv"
+        },
+        "transform": [
+          {
+            "aggregate": [{ "op": "count", "field": "mag", "as": "count" }],
+            "groupby": ["mag"]
+          }
+        ],
+        "mark": { "type": "bar", "color": "gray" },
+        "encoding": {
+          "x": {
+            "field": "mag",
+            "type": "ordinal",
+            "sort": ["NA", "0", "1", "2", "3", "4", "5"],
+            "title": "F-scale"
+          },
+          "y": {
+            "field": "count",
+            "type": "quantitative",
+            "title": "Total Number of Tornadoes"
+          },
+          "tooltip": [
+            { "field": "count", "type": "quantitative", "title": "Total Tornadoes" }
+          ]
+        }
+      };
+      vegaEmbed("#vis2", spec2, { mode: "vega-lite" }).then(console.log).catch(console.warn);
+    </script>
+  </div>
+  <div style="width: 28%;float: right; margin-top: 30px; ">
+    <p2>
+      F-Scale is a classification system used to measure the intensity of tornadoes.It assigns tornadoes to categories
+      ranging from F0 (weakest) to F5 (strongest).
+      <br>F0 (40-72 mph): Minimal damage, like breaking branches.
+      <br>F1 (73-112 mph): Damage to roofs, siding, and mobile homes.
+      <br>F2 (113-157 mph): Considerable damage, including destruction of mobile homes.
+      <br>F3 (158-206 mph): Severe damage, well-constructed houses can be leveled.
+      <br>F4 (207-260 mph): Devastating, can sweep away houses and cars.
+      <br>F5 (261-318 mph): Incredible, capable of massive destruction.
+    </p2>
+  </div>
+  <div style="text-align: left;margin-bottom:40px; ">
+    <p2>
+      Weaker tornadoes tend to occur more frequently, while stronger tornadoes are rarer. <br>
+    </p2>
+  </div>
+
+  <div id="vis3" style="float:left ;  margin: auto;">
+    <script>
+      const spec3 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "width": 260,
+        "height": 240,
+        "title": "Total death",
+        "layer": [
+          {
+            "data": {
+              "url": "https://raw.githubusercontent.com/PatrickMao0/dv2/325e52cc64b56c3f98116ffd47614675b6655078/tornados.csv"
+            },
+            "transform": [
+              { "filter": "datum.fat !== 'NA'" },
+              {
+                "aggregate": [{ "op": "sum", "field": "fat", "as": "total_fat" }],
+                "groupby": ["mag"]
+              }
+            ],
+            "mark": { "type": "bar", "color": "darkred" },
+            "encoding": {
+              "x": {
+                "field": "mag",
+                "type": "ordinal",
+                "sort": ["NA", "0", "1", "2", "3", "4", "5"],
+                "title": "F-scale"
+              },
+              "y": { "field": "total_fat", "type": "quantitative", "title": null },
+              "tooltip": [
+                { "field": "mag", "type": "ordinal" },
+                { "field": "total_fat", "type": "quantitative", "title": "Total fat" }
+              ]
+            }
+          }
+        ]
+      }
+      vegaEmbed("#vis3", spec3, { mode: "vega-lite" }).then(console.log).catch(console.warn);
+    </script>
+  </div>
+
+  <div id="vis4" style=" float: right; margin:0;">
+    <script>
+      const spec4 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "width": 260,
+        "height": 240,
+        "title": "Total injury",
+        "projection": { "type": "equalEarth" },
+        "layer": [
+          {
+            "data": {
+              "url": "https://raw.githubusercontent.com/PatrickMao0/dv2/325e52cc64b56c3f98116ffd47614675b6655078/tornados.csv"
+            },
+            "transform": [
+              { "filter": "datum.inj !== 'NA'" },
+              {
+                "aggregate": [{ "op": "sum", "field": "inj", "as": "total_inj" }],
+                "groupby": ["mag"]
+              }
+            ],
+            "mark": { "type": "bar", "color": "red" },
+            "encoding": {
+              "x": {
+                "field": "mag",
+                "type": "ordinal",
+                "sort": ["NA", "0", "1", "2", "3", "4", "5"],
+                "title": "F-scale"
+              },
+              "y": { "field": "total_inj", "type": "quantitative", "title": null },
+              "tooltip": [
+                { "field": "mag", "type": "ordinal" },
+                { "field": "total_inj", "type": "quantitative", "title": "Total inj" }
+              ]
+            }
+          }
+        ]
+      }
+      vegaEmbed("#vis4", spec4, { mode: "vega-lite" }).then(console.log).catch(console.warn);
+    </script>
+  </div>
+
+  <div style=" margin-top: 30px;    
+  margin-right: 10px;  
+  margin-bottom: 40px;  
+  margin-left: 40px;    
+  width: 50%;">
+    <p2>
+      Majority of the damage is attributed to the rarer tornado events.<br><br>And there is a direct relationship
+      between injury and death numbers
+    </p2>
+  </div>
+
+
+
+  <div id="vis5" style="float: right; margin-top: 40px;margin-bottom: 100px;">
+    <script>
+      const spec5 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "width": 500,
+        "height": 400,
+        "title": "Tornadoes Numbers Over the Years",
+        "data": {
+          "url": "https://raw.githubusercontent.com/PatrickMao0/dv2/325e52cc64b56c3f98116ffd47614675b6655078/tornados.csv"
+        },
+        "selection": {
+          "F-scale_select": {
+            "type": "single",
+            "fields": ["mag"],
+            "bind": {
+              "input": "select",
+              "options": [
+                null,
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5"
+              ],
+              "labels": [
+                "Show All",
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5"
+
+              ],
+              "name": "F-scale Select:"
+            }
+          }
+        },
+        "transform": [
+          { "filter": "datum.mag != 'NA'" },
+          { "filter": { "selection": "F-scale_select" } },
+          {
+            "aggregate": [{ "op": "count", "field": "tornado", "as": "tornado_count" }],
+            "groupby": ["yr", "mag"]
+          }
+        ],
+
+        "mark": { "type": "area", "line": true },
+        "encoding": {
+          "x": { "field": "yr", "type": "temporal", "axis": { "title": "Year" } },
+          "y": {
+            "field": "tornado_count",
+            "type": "quantitative",
+            "axis": { "title": "Tornado Numbers" }
+
+          },
+          "color": {
+            "field": "mag",
+            "type": "quantitative",
+            "scale": { "domain": [0, 5], "range": ["lightgrey", "black"] },
+            "legend": { "title": "F-scale" }
+          },
+          "tooltip": [
+            { "field": "yr", "type": "temporal", "title": "Year" },
+            {
+              "field": "tornado_count",
+              "type": "quantitative",
+              "title": "Tornado Numbers"
+            },
+            { "field": "mag", "type": "ordinal", "title": "F-scale" }
+          ]
         }
       }
-    }
-  ]
-};
-    vegaEmbed("#vis", spec, {mode: "vega-lite"}).then(console.log).catch(console.warn);
-  </script>
-
-    <p2>As shown in the visualisatin, tornadoes mostly occur in the east coast and especially central of United States.
-    <br>Tornado alley is the central region of Uniterdd States receives high frequency of tornado.
-    <br>The main reason is because moist Gulf air meets cold, dry Canadian air, it creats ideal conditions for severe weather
-    </p2>
+      vegaEmbed("#vis5", spec5, { mode: "vega-lite" }).then(console.log).catch(console.warn);
+    </script>
+  </div>
 
 
-    <h3>
-        second visualisation
-    </h3>
+  <div style="width: 12%;text-align:left;margin-top:200px; margin-left: 20px;">
+    <p2>
+      Select different F-scale for individual view.<br><br>
+      The majority of tornadoes are not severe.<br>And there is only a few reached scale of 5.</p2>
+  </div>
+
+  <div >
+    <p3> Datasource:https://www.kaggle.com/datasets/michaelbryantds/tornadoes 
+     <br> Created by Patrick Mao
+    </p3> </div>
+
 </body>
+</head>
+
 </html>
